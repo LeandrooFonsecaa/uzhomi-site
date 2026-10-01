@@ -377,6 +377,39 @@
 
 
   /* Preview banner */
+
+  /* ===== FEED DO INSTAGRAM (Behold) ===== */
+  .ig-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:1.5rem; }
+  .ig-follow { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:700; color:var(--gold-300); text-decoration:none; padding:0.5rem 1rem; border:1px solid rgba(244,166,21,0.3); border-radius:9999px; background:rgba(244,166,21,0.06); transition:background .2s, border-color .2s; }
+  .ig-follow:hover { background:rgba(244,166,21,0.14); border-color:rgba(244,166,21,0.6); }
+  .ig-follow svg { width:16px; height:16px; }
+  .ig-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.75rem; }
+  @media (min-width: 640px) { .ig-grid { grid-template-columns:repeat(3, 1fr); gap:1rem; } }
+  @media (min-width: 1024px) { .ig-grid { grid-template-columns:repeat(6, 1fr); } }
+  .ig-tile { position:relative; aspect-ratio:3/4; overflow:hidden; border-radius:16px; border:1px solid rgba(244,166,21,0.18); background:var(--ink-800); cursor:pointer; padding:0; display:block; width:100%; text-align:left; color:inherit; font:inherit; }
+  .ig-tile img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .7s; }
+  .ig-tile:hover img { transform:scale(1.06); }
+  .ig-tile::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(7,7,7,0.85) 0%, rgba(7,7,7,0.15) 45%, transparent 70%); pointer-events:none; }
+  .ig-badge { position:absolute; top:0.6rem; right:0.6rem; z-index:2; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:9999px; background:rgba(7,7,7,0.55); backdrop-filter:blur(6px); color:#fff; }
+  .ig-badge svg { width:14px; height:14px; }
+  .ig-play { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2; width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:9999px; background:linear-gradient(135deg, #ffd770 0%, #f4a615 50%, #d98c00 100%); color:var(--ink-950); box-shadow:0 10px 30px -8px rgba(244,166,21,0.7); transition:transform .25s; }
+  .ig-play svg { width:22px; height:22px; margin-left:3px; }
+  .ig-tile:hover .ig-play { transform:translate(-50%,-50%) scale(1.1); }
+  .ig-cap { position:absolute; left:0; right:0; bottom:0; z-index:2; padding:0.75rem 0.85rem; font-size:0.78rem; line-height:1.35; color:rgba(255,255,255,0.88); }
+  .ig-txt { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .ig-date { display:block; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-300); margin-bottom:0.2rem; }
+  .ig-skel { aspect-ratio:3/4; border-radius:16px; background:linear-gradient(100deg, var(--ink-800) 30%, var(--ink-700) 50%, var(--ink-800) 70%); background-size:200% 100%; animation:igShimmer 1.4s infinite linear; }
+  @keyframes igShimmer { to { background-position:-200% 0; } }
+
+  #igModal { position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; padding:1rem; background:rgba(7,7,7,0.94); backdrop-filter:blur(8px); }
+  #igModal.open { display:flex; }
+  .ig-modal-box { position:relative; width:100%; max-width:420px; display:flex; flex-direction:column; gap:0.9rem; }
+  .ig-modal-media { position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(244,166,21,0.25); background:#000; max-height:78vh; display:flex; align-items:center; justify-content:center; }
+  .ig-modal-media video, .ig-modal-media img { display:block; width:100%; max-height:78vh; object-fit:contain; background:#000; }
+  .ig-modal-actions { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; }
+  .ig-modal-actions .ig-cap-full { font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; flex:1; }
+  #igClose { position:absolute; top:-3rem; right:0; width:40px; height:40px; border-radius:9999px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#fff; font-size:1.1rem; cursor:pointer; }
+  #igClose:hover { border-color:var(--gold-400); color:var(--gold-300); }
 </style>
 </head>
 <body>
@@ -450,11 +483,23 @@
         <!-- Mosaico principal -->
         <div id="mosaicGrid" class="mosaic-grid"></div>
 
-        <div style="margin-top:2.5rem;">
-          <div style="margin-bottom:1.5rem;"><span class="eyebrow">Vídeos</span></div>
+        <div style="margin-top:3rem;">
+          <!-- Feed automático do Instagram (Behold) — atualiza sozinho a cada post novo -->
+          <div class="ig-head">
+            <span class="eyebrow">Últimos do Instagram</span>
+            <a id="igFollow" class="ig-follow" href="https://www.instagram.com/uzhomi/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+              <span id="igHandle">@uzhomi</span>
+            </a>
+          </div>
 
-          <!-- Player YouTube Shorts -->
-          <div style="max-width:380px; margin:0 auto;">
+          <div id="igGrid" class="ig-grid" aria-live="polite">
+            <div class="ig-skel"></div><div class="ig-skel"></div><div class="ig-skel"></div>
+            <div class="ig-skel"></div><div class="ig-skel"></div><div class="ig-skel"></div>
+          </div>
+
+          <!-- Reserva: aparece só se o Instagram não carregar -->
+          <div id="igFallback" style="display:none; max-width:380px; margin:0 auto;">
             <div style="position:relative; border-radius:20px; overflow:hidden;
                         border:1px solid rgba(244,166,21,0.25);
                         box-shadow:0 20px 60px -20px rgba(244,166,21,0.3);">
@@ -470,15 +515,23 @@
                 </iframe>
               </div>
             </div>
-            <p style="text-align:center;margin-top:1rem;font-size:0.8rem;color:rgba(255,255,255,0.4);">
-              Siga no Instagram:
-              <a href="https://www.instagram.com/banda_uzhomi/" target="_blank" rel="noopener"
-                 style="color:#f4a615;text-decoration:none;font-weight:600;">@banda_uzhomi</a>
-            </p>
           </div>
         </div>
       </div>
     </section>
+
+
+    <!-- Modal do Instagram -->
+    <div id="igModal" onclick="if(event.target===this) closeIgModal()" role="dialog" aria-modal="true" aria-label="Post do Instagram">
+      <div class="ig-modal-box">
+        <button id="igClose" onclick="closeIgModal()" aria-label="Fechar">&#x2715;</button>
+        <div id="igModalMedia" class="ig-modal-media"></div>
+        <div class="ig-modal-actions">
+          <span id="igModalCap" class="ig-cap-full"></span>
+          <a id="igModalLink" class="btn-stage" href="#" target="_blank" rel="noopener" style="padding:0.75rem 1.1rem;font-size:0.75rem;white-space:nowrap;">Ver no Instagram</a>
+        </div>
+      </div>
+    </div>
 
     <!-- Lightbox -->
     <div id="lightbox" onclick="closeLightbox()">
@@ -768,6 +821,133 @@ function selectShow(id) {
 }
 
 /* ===== INIT ===== */
+
+
+/* ===== FEED DO INSTAGRAM (Behold) — atualiza sozinho ===== */
+const IG_FEED_URL = 'https://feeds.behold.so/tlCTPaht5P7rpt5hMEFy';
+let IG_POSTS = [];
+
+function igIcon(name) {
+  if (name === 'play')  return '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+  if (name === 'reel')  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 8h18M8 3l3 5M14 3l3 5"/><path d="M10 12v5l4-2.5z" fill="currentColor" stroke="none"/></svg>';
+  if (name === 'album') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="7" y="7" width="14" height="14" rx="2"/><path d="M3 17V5a2 2 0 0 1 2-2h12"/></svg>';
+  return '';
+}
+
+function igPick(post) {
+  const s = post.sizes || {};
+  const best = (s.large || s.medium || s.full || s.small || {}).mediaUrl;
+  if (best) return best;
+  if (post.mediaType === 'VIDEO') return post.thumbnailUrl || '';
+  return post.mediaUrl || '';
+}
+
+function igDate(ts) {
+  if (!ts) return '';
+  try { return new Date(ts).toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }).replace('.', ''); }
+  catch (e) { return ''; }
+}
+
+function igShowFallback() {
+  document.getElementById('igGrid').style.display = 'none';
+  document.getElementById('igFallback').style.display = 'block';
+}
+
+function igRender(feed) {
+  const grid = document.getElementById('igGrid');
+  IG_POSTS = (feed.posts || []).filter(p => igPick(p)).slice(0, 6);
+  if (!IG_POSTS.length) { igShowFallback(); return; }
+
+  if (feed.username) {
+    document.getElementById('igHandle').textContent = '@' + feed.username;
+    document.getElementById('igFollow').href = 'https://www.instagram.com/' + feed.username + '/';
+  }
+
+  grid.innerHTML = '';
+  IG_POSTS.forEach((p, i) => {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'ig-tile';
+    const isVideo = p.mediaType === 'VIDEO';
+    tile.setAttribute('aria-label', (isVideo ? 'Assistir vídeo: ' : 'Ver post: ') + (p.prunedCaption || p.caption || 'Instagram').slice(0, 80));
+
+    const img = document.createElement('img');
+    img.src = igPick(p);
+    img.alt = (p.altText || p.prunedCaption || 'Post da banda no Instagram').slice(0, 120);
+    img.loading = i < 3 ? 'eager' : 'lazy';
+    tile.appendChild(img);
+
+    if (isVideo) {
+      const play = document.createElement('span'); play.className = 'ig-play'; play.innerHTML = igIcon('play'); tile.appendChild(play);
+      const b = document.createElement('span'); b.className = 'ig-badge'; b.innerHTML = igIcon('reel'); tile.appendChild(b);
+    } else if (p.mediaType === 'CAROUSEL_ALBUM') {
+      const b = document.createElement('span'); b.className = 'ig-badge'; b.innerHTML = igIcon('album'); tile.appendChild(b);
+    }
+
+    const cap = document.createElement('span');
+    cap.className = 'ig-cap';
+    const d = document.createElement('span'); d.className = 'ig-date'; d.textContent = igDate(p.timestamp);
+    cap.appendChild(d);
+    const tx = document.createElement('span'); tx.className = 'ig-txt'; tx.textContent = p.prunedCaption || ''; cap.appendChild(tx);
+    tile.appendChild(cap);
+
+    tile.addEventListener('click', () => openIgModal(i));
+    grid.appendChild(tile);
+  });
+}
+
+function openIgModal(i) {
+  const p = IG_POSTS[i];
+  if (!p) return;
+  const box = document.getElementById('igModalMedia');
+  box.innerHTML = '';
+  if (p.mediaType === 'VIDEO' && p.mediaUrl) {
+    const v = document.createElement('video');
+    v.src = p.mediaUrl;
+    v.poster = igPick(p);
+    v.controls = true; v.autoplay = true; v.playsInline = true;
+    v.setAttribute('playsinline', '');
+    v.addEventListener('error', () => { window.open(p.permalink, '_blank', 'noopener'); closeIgModal(); });
+    box.appendChild(v);
+  } else {
+    let src = igPick(p);
+    if (p.mediaType === 'CAROUSEL_ALBUM' && p.children && p.children.length) {
+      const c = p.children[0], cs = c.sizes || {};
+      src = (cs.full || cs.large || cs.medium || {}).mediaUrl || src;
+    } else if (p.sizes && p.sizes.full && p.sizes.full.mediaUrl) {
+      src = p.sizes.full.mediaUrl;
+    }
+    const im = document.createElement('img');
+    im.src = src; im.alt = (p.altText || p.prunedCaption || 'Post da banda').slice(0, 120);
+    box.appendChild(im);
+  }
+  document.getElementById('igModalCap').textContent = p.prunedCaption || '';
+  document.getElementById('igModalLink').href = p.permalink || document.getElementById('igFollow').href;
+  document.getElementById('igModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeIgModal() {
+  const m = document.getElementById('igModal');
+  if (!m.classList.contains('open')) return;
+  const v = m.querySelector('video'); if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
+  document.getElementById('igModalMedia').innerHTML = '';
+  m.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeIgModal(); });
+
+function loadInstagramFeed() {
+  const ctrl = ('AbortController' in window) ? new AbortController() : null;
+  const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, 10000);
+  fetch(IG_FEED_URL, ctrl ? { signal: ctrl.signal } : {})
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(feed => { clearTimeout(timer); igRender(feed); })
+    .catch(() => { clearTimeout(timer); igShowFallback(); });
+}
+
+document.addEventListener('DOMContentLoaded', loadInstagramFeed);
 
 /* ===== GALERIA MOSAICO + LIGHTBOX — escopo global ===== */
 const ALL_PHOTOS = [
