@@ -532,6 +532,21 @@
     header.site .logo { font-size: 1.3rem; letter-spacing: 0.12em; }
     header.site .btn-stage.small { padding: 0.55rem 0.9rem; font-size: 0.7rem; }
   }
+  /* Enquadramento da foto do topo (foto vertical: músico + violão) */
+  .hero-bg img { object-position: 40% 60%; z-index: 0; }
+  .hero-bg video { z-index: 1; }
+  .hero-bg::after { z-index: 2; }
+  @media (min-width: 1100px) and (orientation: landscape) {
+    /* Fundo: a mesma foto, desfocada e escura, para não sobrar área preta */
+    .hero-bg::before { content: ''; position: absolute; inset: -80px; z-index: 0; background: url('img/hero.jpg') center 70% / cover no-repeat; filter: blur(48px) brightness(0.4) saturate(1.2); }
+    /* Foto nítida no lado direito, mostrando o músico e o violão inteiros */
+    .hero-bg img { left: auto; right: 0; width: min(62%, 115vh); z-index: 1; object-position: 50% 66%;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 32%); mask-image: linear-gradient(to right, transparent 0%, #000 32%); }
+    .hero-bg video { z-index: 2; }
+    .hero-bg::after { z-index: 3; background:
+      linear-gradient(to bottom, rgba(7,7,7,0.45) 0%, transparent 18%, transparent 78%, var(--ink-950) 100%),
+      linear-gradient(to right, rgba(7,7,7,0.85) 0%, rgba(7,7,7,0.5) 38%, transparent 62%); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     .hero-bg img, .marquee-track, .mosaic-tile, .hero h1 .line > span, .hero .eyebrow, .hero p.sub, .hero .cta-row { animation: none; opacity: 1; transform: none; }
